@@ -9,14 +9,21 @@
  On your own github page go to the repository settings and enable Actions.
  
  Next put your build files in the Build folder. Everything here will be copied over to the sd.raw when making a netplay build.
+
+### Dolphin 
+ Netplay files in the NetplayFiles folder will have to be updated with the latest P+ netplay build files or your custom netplay files. (Mainly the code menu)
  
  Run CreateSD.bat to create an sd.raw file in the "Dolphin/User/Wii" Folder
  
  For the dolphin folder keep in mind github will build a new dolphin.exe for every change you make in here. Everything is pretty much set up here but if you want to customize the save file just run P+ offline, set up everything you want then close the game. 
+ 
  Then copy the files in "User/Wii/title/00010000/52534245/data" to "Sys/Wii/title/00010000/52534245/data". The files in User will be used for offline play and Sys will be used on netplay. If you want to customize the dolphin icon put a custom .ico file in the Resources folder. 
+ 
  After uploading your changes to github, actions will start building your dolphin.exe. Go to your build's github page and click on the actions tab. You should see it start building. After it's done it'll post a release you can download.
+ 
  Download the zip and put the sd.raw you built with the CreateSD.bat script (located in Dolphin/User/Wii) in the User/Wii folder.
  
+### Wii
  Run "Prepare Wii Build.bat" to create a wii build. This will create a .zip file automatically. If you want to disable this edit "Prepare Wii Build.bat" and delete the line that says "powershell.exe .\ZipWiiFiles.ps1"
  
 ## How to make a custom updater
