@@ -1,0 +1,137 @@
+name: PR Builds x64
+
+on:
+  push:
+    branches:
+        - "**"
+    paths-ignore:
+        - "**.md"
+        - "Build/**"
+        - "MakeSD/**"
+
+jobs:
+  windows:
+    strategy:
+      fail-fast: false
+    env:
+      DXSDK_DIR: "C:\\Program Files (x86)\\Microsoft DirectX SDK (June 2010)\\"
+    name: "Windows Dolphin"
+    runs-on: windows-2019
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v2.3.1
+
+      - name: 'Fetch Git Tags'
+        shell: bash
+        if: success()
+        run: |
+          git fetch --prune --unshallow
+          echo "GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+          echo "GIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "GIT_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+          echo "CURR_DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+
+      - name: "Remove Redistributable"
+        shell: cmd
+        run: |
+          MsiExec.exe /passive /X{F0C3E5D1-1ADE-321E-8167-68EF0DE699A5}
+          MsiExec.exe /passive /X{1D8E6291-B0D5-35EC-8441-6616F567A0F7}
+          mkdir .\Tools\DX
+
+      - name: "Setup MSBuild"
+        uses: microsoft/setup-msbuild@v1
+
+      - name: "Install DirectX SDK"
+        shell: powershell
+        run: |
+          choco install directx-sdk
+
+      - name: "Clone Dolphin"
+        shell: cmd
+        run: |
+          mkdir ${{ github.workspace }}\Binary\x64\
+          git clone https://github.com/jlambert360/Ishiiruka
+          del ${{ github.workspace }}\Ishiiruka\Installer\Dolphin.ico
+          copy /b /v /y ${{ github.workspace }}\Resources\Dolphin.ico ${{ github.workspace }}\Ishiiruka\Installer\
+
+      - name: "Build Dolphin"
+        shell: cmd
+        run: |
+          msbuild /p:Configuration=Release /p:Platform=x64 "${{ github.workspace }}\Ishiiruka\Source\Dolphin.sln"
+          copy /b /v /y .\Ishiiruka\Binary\x64\Dolphin.exe ${{ github.workspace }}\Binary\x64\
+
+      - name: "Setup Nuget.exe"
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '5.x'
+
+      - name: "Build Updater"
+        working-directory: ${{ github.workspace }}
+        shell: cmd
+        run: |
+          git clone https://github.com/jlambert360/FPM-Win-Updater
+          cd FPM-Win-Updater
+          nuget restore ${{ github.workspace }}\FPM-Win-Updater\DolphinUpdater.sln
+          msbuild /p:Configuration=Release /p:Platform="Any CPU" ${{ github.workspace }}\FPM-Win-Updater\DolphinUpdater.sln
+          copy /b /v /y .\DolphinUpdater\bin\Release\Updater.exe ${{ github.workspace }}\Binary\x64\
+
+      - name: "Build Replay Manager"
+        working-directory: ${{ github.workspace }}
+        shell: cmd
+        run: |
+          git clone https://github.com/jlambert360/Dolphin-Replay-Manager
+          cd Dolphin-Replay-Manager
+          msbuild /p:Configuration=Release /p:Platform="Any CPU" "${{ github.workspace }}\Dolphin-Replay-Manager\Bird's Replay Manager.sln"
+          copy /b /v /y ".\Bird's Replay Manager\bin\Release\Bird's Replay Manager.exe" ${{ github.workspace }}\Binary\x64\
+
+      - name: "Prepare Artifact"
+        working-directory: ${{ github.workspace }}
+        shell: cmd
+        run: |
+          xcopy /E /V /Y /I .\Dolphin\User .\Binary\x64\User
+          xcopy /E /V /Y /I .\Dolphin\Sys .\Binary\x64\Sys
+          xcopy /E /V /Y /I .\Dolphin\Games .\Binary\x64\Games
+          xcopy /E /V /Y /I .\Dolphin\Launcher .\Binary\x64\Launcher
+          copy /b /v /y .\Ishiiruka\Changelog.txt .\Binary\x64\
+          copy /b /v /y .\Dolphin\license.txt .\Binary\x64\
+          copy /b /v /y .\Dolphin\portable.txt .\Binary\x64\
+          copy /b /v /y .\Dolphin\vcruntime140_1.dll .\Binary\x64\
+
+      - name: "Package Artifact"
+        working-directory: ${{ github.workspace }}
+        run: |
+          $FILE_NAME="Build.zip"
+          mkdir artifact
+          cd .\Binary\x64\
+          7z a $FILE_NAME .\*
+          move $FILE_NAME ..\..\artifact\
+
+      - name: "Publish"
+        if: success()
+        uses: actions/upload-artifact@v2-preview
+        with:
+          name: "Build"
+          path: "./artifact/"
+
+      - name: "Create Release"
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.GIT_HASH }}
+          release_name: Release ${{ env.GIT_HASH }}
+          body: ""
+          draft: false
+          prerelease: false
+
+      - name: Upload Release
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "${{ github.workspace }}/artifact/Build.zip"
+          asset_name: "Build.zip"
+          asset_content_type: application/zip

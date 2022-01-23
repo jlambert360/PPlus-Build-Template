@@ -1,0 +1,7 @@
+Project+/codeset.txt
+Project+/log.txt
+*.dds
+*.gct
+*.thp
+*.raw
+ReplayData/*
