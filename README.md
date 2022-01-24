@@ -13,11 +13,11 @@
 ## Dolphin 
 
 ### Creating/Updating your sd.raw
- Netplay files in the NetplayFiles folder will have to be updated with the latest P+ netplay build files or your custom netplay files. (Mainly the code menu)
- 
  Run CreateSD.bat to create an sd.raw file in the "Dolphin/User/Wii" Folder.
  
  You can customize where the sd.raw gets made in "MakeSD/Config.ini" under the "SD_CARD_PATH" option.
+ 
+ Netplay files in the sd.raw will be generated automatically with the exception of "Net-MyMusic.asm", "Net-CodeMenu.asm" and "dnet.cmnu". These files will need to be updated in the NetplayFiles folder with the latest P+ netplay build files. If you have a custom code menu use your custom files instead.
  
 ### Building your own dolphin.exe
  For the dolphin folder keep in mind github will build a new dolphin.exe for every change you make in here. Everything is pretty much set up here but if you want to customize the save file just run P+ offline, set up everything you want then close the game. 
