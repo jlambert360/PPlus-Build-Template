@@ -10,23 +10,28 @@
  
  Next put your build files in the Build folder. Everything here will be copied over to the sd.raw when making a netplay build.
 
-### Dolphin 
+## Dolphin 
+
+### Creating/Updating your sd.raw
  Netplay files in the NetplayFiles folder will have to be updated with the latest P+ netplay build files or your custom netplay files. (Mainly the code menu)
  
- Run CreateSD.bat to create an sd.raw file in the "Dolphin/User/Wii" Folder
+ Run CreateSD.bat to create an sd.raw file in the "Dolphin/User/Wii" Folder.
  
+ You can customize where the sd.raw gets made in "MakeSD/Config.ini" under the "SD_CARD_PATH" option.
+ 
+### Building your own dolphin.exe
  For the dolphin folder keep in mind github will build a new dolphin.exe for every change you make in here. Everything is pretty much set up here but if you want to customize the save file just run P+ offline, set up everything you want then close the game. 
  
  Then copy the files in "User/Wii/title/00010000/52534245/data" to "Sys/Wii/title/00010000/52534245/data". The files in User will be used for offline play and Sys will be used on netplay. If you want to customize the dolphin icon put a custom .ico file in the Resources folder. 
  
  After uploading your changes to github, actions will start building your dolphin.exe. Go to your build's github page and click on the actions tab. You should see it start building. After it's done it'll post a release you can download.
  
- Download the zip and put the sd.raw you built with the CreateSD.bat script (located in Dolphin/User/Wii) in the User/Wii folder.
+ Download the zip and put the sd.raw you built with the CreateSD.bat script in the User/Wii folder.
  
-### Wii
+## Wii
  Run "Prepare Wii Build.bat" to create a wii build. This will create a .zip file automatically. If you want to disable this edit "Prepare Wii Build.bat" and delete the line that says "powershell.exe .\ZipWiiFiles.ps1"
  
-## How to make a custom updater
+## How to make a custom dolphin updater
  By default github will include an Updater.exe with your dolphin download. If you want to customize where the updater looks for updates follow these steps.
  
  First you need to make the update files. Run the "Delete files (Update).bat" included in the Dolphin folder to remove all files not needed for the update. Then put your sd.raw in the User/Wii folder and zip the files up.
