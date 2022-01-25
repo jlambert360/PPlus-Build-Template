@@ -19,11 +19,18 @@
  
  Netplay files in the sd.raw will be generated automatically with the exception of "Net-MyMusic.asm", "Net-CodeMenu.asm" and "dnet.cmnu". These files will need to be updated in the NetplayFiles folder with the latest P+ netplay build files. If you have a custom code menu use your custom files instead.
  
+### Customizing in game names and controls
+ To customize the save file just run P+ offline, set up all the controls the way you want normally, then close the game.
+ 
+ Then copy the files in "User/Wii/title/00010000/52534245/data" to "Sys/Wii/title/00010000/52534245/data".
+ 
+ The files in the User folder will be used for offline play and the files in the Sys folder will be used on netplay.
+ 
 ### Building your own dolphin.exe
- For the dolphin folder keep in mind github will build a new dolphin.exe for every change you make in here. Everything is pretty much set up here but if you want to customize the save file just run P+ offline, set up everything you want then close the game. 
- 
- Then copy the files in "User/Wii/title/00010000/52534245/data" to "Sys/Wii/title/00010000/52534245/data". The files in User will be used for offline play and Sys will be used on netplay. If you want to customize the dolphin icon put a custom .ico file in the Resources folder. 
- 
+ Github will build a new dolphin.exe for every change you make in the Dolphin folder as long as you have actions enabled on your repository. 
+
+ If you want to customize the dolphin icon put a custom .ico file in the Resources folder then head to Dolphin/Sys/Resources and customize Dolphin.png, dolphin_logo.png, and dolphin_logo@2x.png.
+
  After uploading your changes to github, actions will start building your dolphin.exe. Go to your build's github page and click on the actions tab. You should see it start building. After it's done it'll post a release you can download.
  
  Download the zip and put the sd.raw you built with the CreateSD.bat script in the User/Wii folder.
