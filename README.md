@@ -13,9 +13,9 @@
 ## Dolphin 
 
 ### Creating/Updating your sd.raw
- Run CreateSD.bat to create an sd.raw file or update an existing sd.raw in the "Dolphin/User/Wii" Folder.
+ To customize the size and where the sd.raw gets made navigate to "MakeSD/Config.ini", open it in a text editor and under SD_CARD_SIZE set the size then under "SD_CARD_PATH" set the path.
  
- You can customize where the sd.raw gets made in "MakeSD/Config.ini" under the "SD_CARD_PATH" option.
+ Run CreateSD.bat to create an sd.raw file or update an existing sd.raw. By default it will be in the "Dolphin/User/Wii" Folder.
  
  Netplay files in the sd.raw will be generated automatically with the exception of "Net-MyMusic.asm", "Net-CodeMenu.asm" and "dnet.cmnu". These files will need to be updated in the NetplayFiles folder with the latest P+ netplay build files. If you have a custom code menu use your custom files instead.
  
