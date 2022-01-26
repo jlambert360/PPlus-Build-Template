@@ -49,9 +49,9 @@
         working-directory: ${{ github.workspace }}
         shell: powershell
         run: |
-          (Get-Content ${{ github.workspace }}\Ishiiruka\Source\Core\DolphinWX\Main.cpp) -replace 'https://projectplusgame.com/update.json', 'https://raw.githubusercontent.com/jlambert360/jlambert360.github.io/master/BirdBuildTest.json' | Out-File -encoding ASCII ${{ github.workspace }}\Ishiiruka\Source\Core\DolphinWX\Main.cpp
+          (Get-Content ${{ github.workspace }}\Ishiiruka\Source\Core\DolphinWX\Main.cpp) -replace 'https://projectplusgame.com/update.json', 'https://raw.githubusercontent.com/jlambert360/PPlus-Build-Template/main/Resources/update.json' | Out-File -encoding ASCII ${{ github.workspace }}\Ishiiruka\Source\Core\DolphinWX\Main.cpp
 
- Replace 'https://raw.githubusercontent.com/jlambert360/jlambert360.github.io/master/BirdBuildTest.json' with a json file that you host somewhere. You can use mine as an example.
+ Replace 'https://raw.githubusercontent.com/jlambert360/PPlus-Build-Template/main/Resources/update.json' with a link to the json file in your repository Resources folder. To get the raw link just navigate to it on your github page and hit the button that says raw, or just replace my username and repository name with yours.
  
  To get the hash go here: https://github.com/jlambert360/Ishiiruka/commits/master and hit the 2 squares on the right of the screen on the latest commit to copy the latest hash. You can compare this in dolphin in help->about under Revision.
  
