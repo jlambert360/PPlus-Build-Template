@@ -1,1 +1,1 @@
-Compress-Archive -Path ./Build/ "WomBuild Wii.zip"
+Compress-Archive -Path ./Build/ "Wii Build.zip"
